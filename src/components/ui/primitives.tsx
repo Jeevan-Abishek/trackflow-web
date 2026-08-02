@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import { forwardRef, type HTMLAttributes, type InputHTMLAttributes } from "react";
+import { forwardRef, type HTMLAttributes, type InputHTMLAttributes, type LabelHTMLAttributes } from "react";
 
 export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
@@ -62,6 +62,6 @@ export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputE
 );
 Input.displayName = "Input";
 
-export function Label({ className, ...props }: HTMLAttributes<HTMLLabelElement>) {
+export function Label({ className, ...props }: LabelHTMLAttributes<HTMLLabelElement>) {
   return <label className={cn("mb-1.5 block text-sm font-medium text-ink/80", className)} {...props} />;
 }
