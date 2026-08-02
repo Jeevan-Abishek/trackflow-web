@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: trackflow-web
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false
+      - key: NEXT_PUBLIC_MAP_STYLE_URL
+        value: https://tiles.openfreemap.org/styles/liberty
+      - key: NODE_VERSION
+        value: 20.15.0
+
+# Scaling later (paid plans), with no code changes required:
+#   - bump `plan` to starter/standard/pro
+#   - raise `numInstances` (or enable autoscaling) once on a paid plan
+#     to run this service behind Render's load balancer
+#   - the app is stateless (all state lives in Supabase/Postgres),
+#     so it's safe to run more than one instance at a time
