@@ -1,10 +1,21 @@
 import { cn } from "@/lib/cn";
-import { forwardRef, type HTMLAttributes, type InputHTMLAttributes } from "react";
+import {
+  forwardRef,
+  type HTMLAttributes,
+  type InputHTMLAttributes,
+  type LabelHTMLAttributes,
+} from "react";
 
-export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
+export function Card({
+  className,
+  ...props
+}: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("rounded-2xl border border-line bg-white p-6 shadow-card", className)}
+      className={cn(
+        "rounded-2xl border border-line bg-white p-6 shadow-card",
+        className
+      )}
       {...props}
     />
   );
@@ -47,21 +58,34 @@ export function Badge({
   );
 }
 
-export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(
-  ({ className, ...props }, ref) => (
-    <input
-      ref={ref}
+export const Input = forwardRef<
+  HTMLInputElement,
+  InputHTMLAttributes<HTMLInputElement>
+>(({ className, ...props }, ref) => (
+  <input
+    ref={ref}
+    className={cn(
+      "h-11 w-full rounded-xl border border-line bg-white px-4 text-sm text-ink placeholder:text-ink/40",
+      "focus-visible:border-brand-500",
+      className
+    )}
+    {...props}
+  />
+));
+
+Input.displayName = "Input";
+
+export function Label({
+  className,
+  ...props
+}: LabelHTMLAttributes<HTMLLabelElement>) {
+  return (
+    <label
       className={cn(
-        "h-11 w-full rounded-xl border border-line bg-white px-4 text-sm text-ink placeholder:text-ink/40",
-        "focus-visible:border-brand-500",
+        "mb-1.5 block text-sm font-medium text-ink/80",
         className
       )}
       {...props}
     />
-  )
-);
-Input.displayName = "Input";
-
-export function Label({ className, ...props }: HTMLAttributes<HTMLLabelElement>) {
-  return <label className={cn("mb-1.5 block text-sm font-medium text-ink/80", className)} {...props} />;
+  );
 }
