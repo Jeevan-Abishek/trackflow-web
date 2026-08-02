@@ -11,7 +11,11 @@ export default async function AdminOverviewPage() {
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("trips").select("*", { count: "exact", head: true }).eq("status", "active"),
       supabase.from("trips").select("*", { count: "exact", head: true }),
-      supabase.from("trips").select("created_at, total_distance_m, status").order("created_at", { ascending: true }),
+      supabase
+        .from("trips")
+        .select("created_at, total_distance_m, status")
+        .order("created_at", { ascending: true })
+        .returns<{ created_at: string; total_distance_m: number; status: string }[]>(),
     ]);
 
   const totalDistance = (trips ?? []).reduce((sum, t) => sum + (t.total_distance_m ?? 0), 0);
