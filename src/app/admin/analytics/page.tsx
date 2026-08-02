@@ -4,12 +4,23 @@ import { AnalyticsCharts } from "./analytics-charts";
 import { ExportButton } from "../export-button";
 import { formatDistance, formatSpeed } from "@/lib/geo";
 
+interface TripAnalyticsRow {
+  id: string;
+  title: string;
+  created_at: string;
+  total_distance_m: number;
+  max_speed_kmh: number;
+  avg_speed_kmh: number;
+  status: string;
+}
+
 export default async function AdminAnalyticsPage() {
   const supabase = createClient();
   const { data: trips } = await supabase
     .from("trips")
     .select("id, title, created_at, total_distance_m, max_speed_kmh, avg_speed_kmh, status")
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: true })
+    .returns<TripAnalyticsRow[]>();
 
   const rows = trips ?? [];
   const totalDistance = rows.reduce((s, t) => s + t.total_distance_m, 0);
