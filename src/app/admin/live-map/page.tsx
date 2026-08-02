@@ -1,6 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { Card, Badge } from "@/components/ui/primitives";
 import { AdminLiveMap } from "./admin-live-map";
+import type { Trip } from "@/lib/types";
+
+interface ActiveTripRow extends Trip {
+  profiles: { full_name: string | null } | null;
+}
 
 export default async function AdminLiveMapPage() {
   const supabase = createClient();
@@ -8,7 +13,8 @@ export default async function AdminLiveMapPage() {
     .from("trips")
     .select("*, profiles!trips_owner_id_fkey(full_name)")
     .eq("status", "active")
-    .order("started_at", { ascending: false });
+    .order("started_at", { ascending: false })
+    .returns<ActiveTripRow[]>();
 
   const tripIds = (trips ?? []).map((t) => t.id);
   const { data: locations } = tripIds.length
@@ -33,9 +39,7 @@ export default async function AdminLiveMapPage() {
               <span className="text-sm font-medium">{trip.title}</span>
               <Badge tone="live">Live</Badge>
             </div>
-            <p className="mt-1 text-xs text-ink/50">
-              {(trip as unknown as { profiles?: { full_name: string | null } }).profiles?.full_name ?? "Unknown user"}
-            </p>
+            <p className="mt-1 text-xs text-ink/50">{trip.profiles?.full_name ?? "Unknown user"}</p>
           </Card>
         ))}
         {(!trips || trips.length === 0) && <p className="text-sm text-ink/50">No active sessions right now.</p>}
